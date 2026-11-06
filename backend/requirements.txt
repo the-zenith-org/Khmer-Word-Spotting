@@ -1,0 +1,18 @@
+
+# Backend Framework
+fastapi[standard]
+
+# Database
+sqlalchemy
+psycopg[binary]
+alembic
+
+# File Upload
+python-multipart
+
+# Environment Configuration
+pydantic-settings
+
+# Authentication
+python-jose[cryptography]
+passlib[bcrypt]
