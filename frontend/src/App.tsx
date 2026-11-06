@@ -4,7 +4,7 @@ function App() {
     <div className="min-h-screen bg-slate-100 flex items-center justify-center">
       <div className="bg-white p-10 rounded-xl shadow-md text-center">
         <h1 className="text-3xl font-bold text-blue-600">
-          Zenith
+          Khmer Word Spotting
         </h1>
 
         <p className="mt-3 text-gray-600">
