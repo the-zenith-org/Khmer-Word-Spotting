@@ -3,3 +3,8 @@ pandas>=2.0,<3
 Pillow>=10,<13
 torch>=2.2
 transformers>=4.40,<5
+ultralytics>=8.3
+kagglehub
+opencv-python
+numpy
+Pillow
