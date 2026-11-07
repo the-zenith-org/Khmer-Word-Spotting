@@ -3,3 +3,5 @@ models/*
 !models/khmer_word_det/
 models/khmer_word_det/*
 !models/khmer_word_det/*.png
+
+graphify-out/
