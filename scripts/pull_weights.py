@@ -1,7 +1,8 @@
-"""Pull training outputs from the school Jupyter into models/khmer_word_det. Run on the laptop (Tailscale on).
+"""Pull training outputs from the school Jupyter into models/<run>. Run on the laptop (Tailscale on).
 
-    python scripts/pull_weights.py            # once
-    python scripts/pull_weights.py --watch 10 # repeat every 10 min while training
+    python scripts/pull_weights.py                       # v1, once
+    python scripts/pull_weights.py --run khmer_word_det_v2   # v2
+    python scripts/pull_weights.py --run khmer_word_det_v2 --watch 10  # repeat every 10 min while training
 """
 import argparse
 import shutil
@@ -13,12 +14,13 @@ from pathlib import Path
 HOST = 'http://100.84.224.107:9090'
 FILES = ['weights/best.pt', 'weights/last.pt', 'results.csv', 'results.png', 'BoxPR_curve.png',
          'BoxF1_curve.png', 'confusion_matrix.png', 'args.yaml']
-DST = Path(__file__).resolve().parents[1] / 'models' / 'khmer_word_det'
 
 p = argparse.ArgumentParser()
+p.add_argument('--run', default='khmer_word_det', help='run folder name; v2 = khmer_word_det_v2')
 p.add_argument('--token', default='khmer2026')
 p.add_argument('--watch', type=float, default=0, help='minutes between pulls; 0 = once')
 a = p.parse_args()
+DST = Path(__file__).resolve().parents[1] / 'models' / a.run
 
 
 def pull():
@@ -28,7 +30,7 @@ def pull():
         out.parent.mkdir(parents=True, exist_ok=True)
         print('get ', f, flush=True)
         try:
-            r = urllib.request.urlopen(f'{HOST}/files/khmer-models/khmer_word_det/{f}?token={a.token}', timeout=60)
+            r = urllib.request.urlopen(f'{HOST}/files/khmer-models/{a.run}/{f}?token={a.token}', timeout=60)
         except urllib.error.HTTPError as e:
             print('skip', f, e.code, flush=True)
             continue
