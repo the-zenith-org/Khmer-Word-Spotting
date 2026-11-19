@@ -17,7 +17,10 @@ from app.schemas.schema import (
 router = APIRouter()
 
 # Auto-create tables if they don't exist
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"[Database Warning] Table creation skipped or deferred: {e}")
 
 UPLOAD_DIR = os.path.join(os.getcwd(), "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)

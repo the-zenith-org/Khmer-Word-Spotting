@@ -1,6 +1,6 @@
-
 # Backend Framework
 fastapi[standard]
+httpx
 
 # Database
 sqlalchemy
@@ -16,3 +16,6 @@ pydantic-settings
 # Authentication
 python-jose[cryptography]
 passlib[bcrypt]
+
+# Testing
+pytest

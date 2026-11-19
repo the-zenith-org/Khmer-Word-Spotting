@@ -13,7 +13,7 @@ export interface WordSpottingResult {
   bbox_y1: number;
   bbox_x2: number;
   bbox_y2: number;
-  recognized_text: str;
+  recognized_text: string;
   normalized_text?: string;
   confidence_score: number;
   created_at: string;
