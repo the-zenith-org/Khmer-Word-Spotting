@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings
-from typing import List
+
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Khmer Word Spotting System"
@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     )
 
     # CORS
-    CORS_ORIGINS: List[str] = [
+    CORS_ORIGINS: list[str] = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:3000",

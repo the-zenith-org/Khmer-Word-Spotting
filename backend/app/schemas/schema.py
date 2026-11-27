@@ -1,6 +1,6 @@
-from pydantic import BaseModel
-from typing import Optional
 from datetime import datetime
+
+from pydantic import BaseModel
 
 # Bounding box schema
 class BBox(BaseModel):
@@ -17,7 +17,7 @@ class WordSpottingResultBase(BaseModel):
     bbox_x2: float
     bbox_y2: float
     recognized_text: str
-    normalized_text: Optional[str] = None
+    normalized_text: str | None = None
     confidence_score: float
 
 class WordSpottingResultCreate(WordSpottingResultBase):
@@ -37,7 +37,7 @@ class DocumentBase(BaseModel):
 
 class DocumentCreate(DocumentBase):
     file_path: str
-    total_pages: Optional[int] = 1
+    total_pages: int | None = 1
 
 class DocumentResponse(DocumentBase):
     id: int
@@ -52,9 +52,9 @@ class DocumentResponse(DocumentBase):
 # Search schemas
 class SearchQuery(BaseModel):
     query: str
-    min_confidence: Optional[float] = 0.5
-    document_id: Optional[int] = None
-    page_number: Optional[int] = None
+    min_confidence: float | None = 0.5
+    document_id: int | None = None
+    page_number: int | None = None
 
 class SearchResultItem(BaseModel):
     document_id: int

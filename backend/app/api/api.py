@@ -1,38 +1,37 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File
-from sqlalchemy.orm import Session
-from typing import List, Optional
 import os
 import shutil
 
-from app.db.db import get_db, engine, Base
+from app.db.db import Base, engine, get_db
 from app.models.model import Document, WordSpottingResult
 from app.schemas.schema import (
-    DocumentResponse,
-    WordSpottingResultResponse,
-    SearchResultItem,
     BBox,
+    DocumentResponse,
+    SearchResultItem,
+    WordSpottingResultResponse,
 )
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
 # Auto-create tables if they don't exist
 try:
     Base.metadata.create_all(bind=engine)
-except Exception as e:
+except Exception as e:  # noqa: BLE001
     print(f"[Database Warning] Table creation skipped or deferred: {e}")
 
 UPLOAD_DIR = os.path.join(os.getcwd(), "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
-@router.get("/documents", response_model=List[DocumentResponse])
+@router.get("/documents", response_model=list[DocumentResponse])
 def get_documents(db: Session = Depends(get_db)):
     """List all uploaded documents."""
     return db.query(Document).order_by(Document.created_at.desc()).all()
 
 
 @router.post("/documents/upload", response_model=DocumentResponse)
-async def upload_document(file: UploadFile = File(...), db: Session = Depends(get_db)):
+def upload_document(file: UploadFile = File(...), db: Session = Depends(get_db)):
     """Upload a new PDF or image document for word spotting processing."""
     file_path = os.path.join(UPLOAD_DIR, file.filename)
     
@@ -60,10 +59,10 @@ def get_document(document_id: int, db: Session = Depends(get_db)):
     return doc
 
 
-@router.get("/documents/{document_id}/words", response_model=List[WordSpottingResultResponse])
+@router.get("/documents/{document_id}/words", response_model=list[WordSpottingResultResponse])
 def get_document_words(
     document_id: int,
-    page: Optional[int] = Query(None, description="Filter by page number"),
+    page: int | None = Query(None, description="Filter by page number"),
     db: Session = Depends(get_db),
 ):
     """Retrieve recognized word spots for a given document."""
@@ -73,11 +72,11 @@ def get_document_words(
     return query.all()
 
 
-@router.get("/search", response_model=List[SearchResultItem])
+@router.get("/search", response_model=list[SearchResultItem])
 def search_keywords(
     q: str = Query(..., description="Khmer keyword or character to search for"),
     min_confidence: float = Query(0.5, ge=0.0, le=1.0, description="Minimum confidence threshold"),
-    document_id: Optional[int] = Query(None, description="Optional document filter"),
+    document_id: int | None = Query(None, description="Optional document filter"),
     db: Session = Depends(get_db),
 ):
     """Search for words matching a query text across documents."""

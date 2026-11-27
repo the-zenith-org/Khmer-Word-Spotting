@@ -1,12 +1,12 @@
 import os
+
+from app.api.api import router as api_router
+from app.core.core import settings
+from app.db.db import engine
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
-
-from app.core.core import settings
-from app.db.db import engine
-from app.api.api import router as api_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -46,8 +46,8 @@ def health_check():
         with engine.connect() as conn:
             conn.execute(text("SELECT 1"))
             db_status = "connected"
-    except Exception as e:
-        db_status = f"error: {str(e)}"
+    except Exception as e:  # noqa: BLE001
+        db_status = f"error: {e!s}"
 
     return {
         "status": "healthy" if db_status == "connected" else "degraded",
