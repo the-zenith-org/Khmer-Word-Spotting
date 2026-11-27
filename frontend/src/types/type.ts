@@ -16,7 +16,7 @@ export interface WordSpottingResult {
   recognized_text: string;
   normalized_text?: string;
   confidence_score: number;
-  created_at: string;
+  created_at?: string;
 }
 
 export interface DocumentItem {
@@ -25,7 +25,7 @@ export interface DocumentItem {
   file_path: string;
   total_pages: number;
   status: 'pending' | 'processing' | 'completed' | 'failed';
-  created_at: string;
+  created_at?: string;
 }
 
 export interface SearchResultItem {
