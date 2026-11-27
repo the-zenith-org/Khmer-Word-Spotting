@@ -49,12 +49,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
+          pip install ruff pytest-cov pip-audit
 
-      - name: Python Syntax & Compile Check
-        run: |
-          python -m py_compile backend/app/main.py backend/app/core/core.py backend/app/db/db.py backend/app/api/api.py
+      - name: Run Ruff Linter
+        run: ruff check backend/
 
-      - name: Run Backend Tests
+      - name: Run Backend Tests with Coverage
         env:
           PYTHONPATH: backend
           DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/app_db
@@ -64,7 +64,11 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: app_db
         run: |
-          pytest backend/tests/ -v
+          pytest backend/tests/ -v --cov=backend/app --cov-report=term-missing
+
+      - name: Backend Dependency Security Audit
+        continue-on-error: true
+        run: pip-audit -r backend/requirements.txt
 
   # ==========================================
   # Frontend Lint & Build
@@ -95,6 +99,10 @@ jobs:
 
       - name: Type Check and Build
         run: npm run build
+
+      - name: Frontend Dependency Security Audit
+        continue-on-error: true
+        run: npm audit --audit-level=high
 
   # ==========================================
   # Docker Build & Compose Verification

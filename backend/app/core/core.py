@@ -1,6 +1,5 @@
 from pydantic_settings import BaseSettings
-from typing import List, Union
-import json
+from typing import List
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Khmer Word Spotting System"
