@@ -56,6 +56,7 @@ jobs:
 
       - name: Run Backend Tests
         env:
+          PYTHONPATH: backend
           DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/app_db
           POSTGRES_SERVER: localhost
           POSTGRES_PORT: 5432
